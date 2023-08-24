@@ -1,0 +1,4 @@
+docker build -t mynginx ./NGINX
+
+docker run --rm --name mywebserver -p 4242:80 mynginx
+docker run --rm --name mywebserver -v /home/admin/42_inception/NGINX/mounted:/etc/nginx -p 4242:80 mynginx
