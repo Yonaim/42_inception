@@ -30,8 +30,8 @@ WORKDIR /etc/nginx
 COPY ./src ./src
 COPY ./http.d ./http.d
 
-RUN ["cp", "./src/test_nginx.conf", "./nginx.conf"]
-# RUN ["cp", "./src/customed_nginx.conf",  "./nginx.conf"]
+# RUN ["cp", "./src/test.conf", "./nginx.conf"]
+RUN ["cp", "./src/customed_nginx.conf",  "./nginx.conf"]
 
 EXPOSE 4242 443
 
