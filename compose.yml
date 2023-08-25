@@ -1,0 +1,51 @@
+services:
+  mariadb:
+    container_name: mydb
+    image: mariadb:10.2.10
+    build: ./MariaDB
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PW}
+    volumes:
+      - /var/lib/mysql
+      # - ${MYSQL_DATA_PATH}:/var/lib/mysql
+      # - /etc/mysql/conf.d
+      - ${MYSQL_CONFIG_PATH}:/etc/mysql/conf.d:ro
+    networks:
+      - ${MY_NETWORK}
+
+  wordpress:
+    container_name: mywp
+    # image: wordpress:4.8.3-php7.1-fpm-alpine
+    build: ./WordPress
+    environment:
+      - WORDPRESS_DB_HOST=mydb
+      - WORDPRESS_DB_USER=${WP_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${WP_DB_PASSWORD}
+      - WORDPRESS_DB_NAME=${WP_DB_NAME}
+      - WORDPRESS_TABLE_PREFIX=wp_
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - ${MY_NETWORK}
+    depends_on:
+      - mariadb
+
+  nginx:
+    container_name: mynginx
+    image: nginx:1.12.2-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ${NGINX_VHOSTS}:/etc/nginx/conf.d:ro
+      - wordpress-data:/var/www/html:ro
+    networks:
+      - ${MY_NETWORK}
+    depends_on:
+      - wordpress
+
+networks:
+  mynet:
+    name: ${MY_NETWORK}
+  
+volumes:
+  wordpress-data:
