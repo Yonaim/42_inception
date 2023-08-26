@@ -1,5 +1,7 @@
+cd srcs
+cp -r ../data ./data
 docker compose down -v
-docker compose up -d
-# sudo rm -rf inception_volumes/
-# sudo chown -R admin inception_volumes
-docker exec -it mydb mysql -uroot -p1234
+sudo rm -rf ${VOLUMES_PATH}/wordpress
+sudo rm -rf ${VOLUMES_PATH}/db
+# docker volume rm srcs_wordpress-db srcs_wordpress-website
+docker compose up --build

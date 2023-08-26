@@ -2,21 +2,20 @@ services:
   mariadb:
     container_name: mydb
     image: mariadb:10.2.10
-    build: ./MariaDB
+    # build: ./requirements/mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PW}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - /var/lib/mysql
-      # - ${MYSQL_DATA_PATH}:/var/lib/mysql
+      - ${VOLUMES_PATH}/database:/var/lib/mysql
+      - ./srcs/requirements/mariadb/conf:/etc/mysql/conf.d:ro
       # - /etc/mysql/conf.d
-      - ${MYSQL_CONFIG_PATH}:/etc/mysql/conf.d:ro
     networks:
       - ${MY_NETWORK}
 
   wordpress:
     container_name: mywp
-    # image: wordpress:4.8.3-php7.1-fpm-alpine
-    build: ./WordPress
+    image: wordpress:4.8.3-php7.1-fpm-alpine
+    # build: ./requirements/wordpress
     environment:
       - WORDPRESS_DB_HOST=mydb
       - WORDPRESS_DB_USER=${WP_DB_USER}
@@ -24,7 +23,7 @@ services:
       - WORDPRESS_DB_NAME=${WP_DB_NAME}
       - WORDPRESS_TABLE_PREFIX=wp_
     volumes:
-      - wordpress-data:/var/www/html
+      - ${VOLUMES_PATH}/website:/var/www/html
     networks:
       - ${MY_NETWORK}
     depends_on:
@@ -32,12 +31,14 @@ services:
 
   nginx:
     container_name: mynginx
-    image: nginx:1.12.2-alpine
+    # image: nginx:1.12.2-alpine
+    build: ./requirements/nginx
     ports:
       - 80:80
+      - 443:443
+      - 4242:4242
     volumes:
-      - ${NGINX_VHOSTS}:/etc/nginx/conf.d:ro
-      - wordpress-data:/var/www/html:ro
+      - ${VOLUMES_PATH}/website:/var/www/html:ro
     networks:
       - ${MY_NETWORK}
     depends_on:
@@ -47,5 +48,6 @@ networks:
   mynet:
     name: ${MY_NETWORK}
   
-volumes:
-  wordpress-data:
+# volumes:
+#   wordpress-db:
+#   wordpress-website:
