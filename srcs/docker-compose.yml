@@ -1,10 +1,10 @@
 services:
   mariadb:
     container_name: mydb
-    # image: mariadb:10.2.10
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile 
+    image: mariadb:10.2.10
+    # build:
+      # context: ./requirements/mariadb
+      # dockerfile: Dockerfile 
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile 
     restart: always
     ports:
-      - 443:443
+      - 80:443
     volumes:
       - ${VOLUMES_PATH}/website:/var/www/html:ro
     networks:
