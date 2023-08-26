@@ -1,21 +1,25 @@
 services:
   mariadb:
     container_name: mydb
-    image: mariadb:10.2.10
-    # build: ./requirements/mariadb
+    # image: mariadb:10.2.10
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile 
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ${VOLUMES_PATH}/database:/var/lib/mysql
-      - ./srcs/requirements/mariadb/conf:/etc/mysql/conf.d:ro
-      # - /etc/mysql/conf.d
     networks:
       - ${MY_NETWORK}
 
   wordpress:
     container_name: mywp
-    image: wordpress:4.8.3-php7.1-fpm-alpine
-    # build: ./requirements/wordpress
+    # image: wordpress:4.8.3-php7.1-fpm-alpine
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile 
+    restart: always
     environment:
       - WORDPRESS_DB_HOST=mydb
       - WORDPRESS_DB_USER=${WP_DB_USER}
@@ -32,11 +36,12 @@ services:
   nginx:
     container_name: mynginx
     # image: nginx:1.12.2-alpine
-    build: ./requirements/nginx
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile 
+    restart: always
     ports:
-      - 80:80
       - 443:443
-      - 4242:4242
     volumes:
       - ${VOLUMES_PATH}/website:/var/www/html:ro
     networks:
@@ -47,7 +52,3 @@ services:
 networks:
   mynet:
     name: ${MY_NETWORK}
-  
-# volumes:
-#   wordpress-db:
-#   wordpress-website:

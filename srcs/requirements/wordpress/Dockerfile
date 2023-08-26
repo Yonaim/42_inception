@@ -11,4 +11,6 @@ FROM wordpress:4.8.3-php7.1-fpm-alpine
 # Set execute permissions for the script
 # RUN chmod +x /wait-for-db.sh
 
+# CMD ["php-fpm81", "-F"]
+
 # ... Other instructions
