@@ -1,23 +1,30 @@
-# Alpine Linux 기반 이미지 선택
 FROM alpine:3.18
 
-# 필요한 패키지 설치
+WORKDIR /
+
 RUN apk update \
-	&& apk add php81-fpm curl \
+	&& wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+	&& chmod +x /usr/bin/dumb-init \
+	&& apk add php81 php81-fpm php81-openssl php81-phar curl \
 	&& export PATH=$PATH:/usr/sbin/php-fpm81
 
-# 작업 디렉토리 설정
-WORKDIR /var/www/html
+# Install wp-cli (Wordpress CLI)
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
 
-# WordPress 다운로드 및 설치
-RUN curl -O https://wordpress.org/latest.tar.gz && \
-    tar -xzvf latest.tar.gz && \
-    rm latest.tar.gz
+RUN mkdir -p /var/www/html \
+	&& cd /var/www/html \
+	&& wp core download
 
-# PHP-FPM 설정 파일 복사
-COPY /conf/php-fpm.conf /etc/php81/php-fpm.conf
+# Set configuration file
+COPY ./conf/www.conf /etc/php81/php-fpm.d
+
+# Copy script file and set dumb-init as PID 1
+COPY ./tools/script.sh /
+RUN  chmod +x /script.sh
+ENTRYPOINT ["dumb-init", "--"]
 
 EXPOSE 9000
 
-# PHP-FPM 실행
-CMD ["php-fpm8.1", "-F"]
+CMD [ "sh", "-c", "/script.sh" ]

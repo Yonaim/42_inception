@@ -17,10 +17,15 @@ RUN mkdir -p /etc/nginx/ssl \
 	&& openssl x509 -req -in certificate_request.csr -signkey private_key.pem \
 	-days 365 -out certificate.crt
 
-# Set Nginx configuration file
-COPY /conf/nginx.conf /etc/nginx/nginx.conf
-COPY /conf/http.d /etc/nginx/http.d
+# Set configuration file
+COPY /conf/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy script file and set dumb-init as PID 1
+COPY ./tools/script.sh /
+RUN  chmod +x /script.sh
+# ENV PATH="/usr/bin:$PATH"
+ENTRYPOINT ["dumb-init", "--"]
 
 EXPOSE 443
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "sh", "-c", "/script.sh" ]

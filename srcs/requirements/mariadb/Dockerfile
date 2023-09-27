@@ -1,4 +1,21 @@
-FROM mariadb:10.2.10
+FROM alpine:3.18
 
-COPY ./conf/my.cnf  /etc/my.cnf
+WORKDIR /
 
+RUN apk update \
+    && apk add mariadb mariadb-client
+RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+	&& chmod +x /usr/bin/dumb-init
+
+# Set configuration file
+COPY ./conf/mariadb-server.cnf /etc/mysql/mariadb.conf.d/
+
+# Copy script file and set dumb-init as PID 1
+COPY ./tools/script.sh /
+RUN  chmod +x /script.sh
+# ENV PATH="/usr/bin:$PATH"
+ENTRYPOINT ["dumb-init", "--"]
+
+EXPOSE 3306
+
+CMD [ "sh", "-c", "/script.sh" ]
