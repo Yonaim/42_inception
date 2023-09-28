@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_CONF_PATH=./srcs/docker-compose.yml
+DOCKER_COMPOSE_CONF_PATH=/srcs/docker-compose.yml
 
 # -------------------------------- BASIC RULES ------------------------------- #
 
