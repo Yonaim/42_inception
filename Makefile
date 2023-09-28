@@ -4,8 +4,8 @@ DOCKER_COMPOSE_CONF_PATH=./srcs/docker-compose.yml
 
 all:
 	make clean
-	sudo mkdir -p /home/admin/data/database_data
-	sudo mkdir -p /home/admin/data/wordpress_data
+	sudo mkdir -p ${HOME}/data/database_data
+	sudo mkdir -p ${HOME}/data/wordpress_data
 	docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up
 
 clean:
@@ -26,8 +26,8 @@ re:
 
 # Build images and run containers
 build:
-	sudo mkdir -p /home/admin/data/database_data
-	sudo mkdir -p /home/admin/data/wordpress_data
+	sudo mkdir -p ${HOME}/data/database_data
+	sudo mkdir -p ${HOME}/data/wordpress_data
 	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up --build
 
 # Stop and restart containers that are already running

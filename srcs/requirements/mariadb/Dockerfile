@@ -8,12 +8,11 @@ RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/downlo
 	&& chmod +x /usr/bin/dumb-init
 
 # Set configuration file
-COPY ./conf/mariadb-server.cnf /etc/mysql/mariadb.conf.d/
+COPY ./conf/my.cnf /etc/
 
 # Copy script file and set dumb-init as PID 1
 COPY ./tools/script.sh /
 RUN  chmod +x /script.sh
-# ENV PATH="/usr/bin:$PATH"
 ENTRYPOINT ["dumb-init", "--"]
 
 EXPOSE 3306

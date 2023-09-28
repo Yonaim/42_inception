@@ -6,6 +6,8 @@ WORKDIR /
 RUN apk update \
 	&& apk add nginx \
 	&& apk add openssl curl
+RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+	&& chmod +x /usr/bin/dumb-init
 
 # Generate a self-signed SSL(TLS) certificate
 RUN mkdir -p /etc/nginx/ssl \
@@ -18,7 +20,7 @@ RUN mkdir -p /etc/nginx/ssl \
 	-days 365 -out certificate.crt
 
 # Set configuration file
-COPY /conf/default.conf /etc/nginx/conf.d/default.conf
+COPY /conf/default.conf /etc/nginx/http.d/default.conf
 
 # Copy script file and set dumb-init as PID 1
 COPY ./tools/script.sh /

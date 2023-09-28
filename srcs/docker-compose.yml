@@ -4,7 +4,7 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile 
-    # restart: always
+    restart: always
     env_file: .env
     volumes:
       - database_data:/var/lib/mysql
@@ -16,7 +16,7 @@ services:
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile 
-    # restart: always
+    restart: always
     env_file: .env
     volumes:
       - wordpress_data:/var/www/html
@@ -30,16 +30,17 @@ services:
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile 
-    # restart: always
+    restart: always
     env_file: .env
     ports:
-      - 80:443
+      - 443:443
     volumes:
       - wordpress_data:/var/www/html:ro
     networks:
       - inception
     depends_on:
       - wordpress
+      - mariadb
 
 volumes:
   wordpress_data:

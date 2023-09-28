@@ -5,17 +5,13 @@ WORKDIR /
 RUN apk update \
 	&& wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
 	&& chmod +x /usr/bin/dumb-init \
-	&& apk add php81 php81-fpm php81-openssl php81-phar curl \
-	&& export PATH=$PATH:/usr/sbin/php-fpm81
+	&& export PATH=$PATH:/usr/bin \
+	&& apk add mariadb-client php81-mysqli php81 php81-fpm php81-openssl php81-phar curl php-iconv php-mbstring
 
 # Install wp-cli (Wordpress CLI)
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
-
-RUN mkdir -p /var/www/html \
-	&& cd /var/www/html \
-	&& wp core download
 
 # Set configuration file
 COPY ./conf/www.conf /etc/php81/php-fpm.d
