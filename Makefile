@@ -1,11 +1,8 @@
-DOCKER_COMPOSE_CONF_PATH=/srcs/docker-compose.yml
+DOCKER_COMPOSE_CONF_PATH=./srcs/docker-compose.yml
 
 # -------------------------------- BASIC RULES ------------------------------- #
 
 all:
-	make clean
-	sudo mkdir -p ${HOME}/data/database_data
-	sudo mkdir -p ${HOME}/data/wordpress_data
 	docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up
 
 clean:
