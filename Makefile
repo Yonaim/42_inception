@@ -3,7 +3,7 @@ DOCKER_COMPOSE_CONF_PATH=./srcs/docker-compose.yml
 # -------------------------------- BASIC RULES ------------------------------- #
 
 all:
-	docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up
+	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up
 
 clean:
 	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} down -v --rmi all --remove-orphans
@@ -11,6 +11,7 @@ clean:
 fclean:
 	make clean
 	sudo rm -rf ${HOME}/data
+	sudo docker image prune -a
 	sudo docker system prune --volumes --all --force
 	sudo docker network prune --force
 	sudo docker volume prune --force
@@ -21,13 +22,15 @@ re:
 
 # ---------------------------- COMPOSE OPTION -------------------------------- #
 
-# Build images and run containers
+up:
+	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up
+
+down:
+	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} down
+
 build:
-	sudo mkdir -p ${HOME}/data/database_data
-	sudo mkdir -p ${HOME}/data/wordpress_data
 	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} up --build
 
-# Stop and restart containers that are already running
 restart:
 	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} restart
 
