@@ -1,4 +1,3 @@
-
 mkdir -p /run/mysqld/
 chown -R mysql:mysql /run/mysqld
 chown -R mysql:mysql /var/lib/mysql/
@@ -20,4 +19,3 @@ pkill mariadbd
 sleep 3
 
 exec mariadbd --user=mysql
-# exec sleep infinity
