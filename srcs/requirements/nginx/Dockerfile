@@ -4,10 +4,9 @@ WORKDIR /
 
 # Install the required packages
 RUN apk update \
-	&& apk add nginx \
-	&& apk add openssl curl
-RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
-	&& chmod +x /usr/bin/dumb-init
+	&& wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+	&& chmod +x /usr/bin/dumb-init \
+	&& apk add nginx openssl curl
 
 # Generate a self-signed SSL(TLS) certificate
 RUN mkdir -p /etc/nginx/ssl \

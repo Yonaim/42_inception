@@ -2,10 +2,11 @@ FROM alpine:3.18
 
 WORKDIR /
 
+# Install the required packages
 RUN apk update \
+	&& wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
+	&& chmod +x /usr/bin/dumb-init \
     && apk add mariadb mariadb-client
-RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
-	&& chmod +x /usr/bin/dumb-init
 
 # Set configuration file
 COPY ./conf/my.cnf /etc/

@@ -36,7 +36,7 @@ build:
 restart:
 	sudo docker compose -f ${DOCKER_COMPOSE_CONF_PATH} restart
 
-# ------------------------------- VIEW LOG ----------------------------------- #
+# --------------------------------- DEBUG ------------------------------------ #
 
 sh_wp:
 	sudo docker exec -it wordpress sh

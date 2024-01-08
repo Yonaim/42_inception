@@ -2,10 +2,10 @@ FROM alpine:3.18
 
 WORKDIR /
 
+# Install the required packages
 RUN apk update \
 	&& wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
 	&& chmod +x /usr/bin/dumb-init \
-	&& export PATH=$PATH:/usr/bin \
 	&& apk add mariadb-client php81-mysqli php81 php81-fpm php81-openssl php81-phar curl php-iconv php-mbstring
 
 # Install wp-cli (Wordpress CLI)
